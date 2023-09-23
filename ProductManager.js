@@ -9,7 +9,6 @@ class ProductManager {
     }
 
     async loadProductsFromFile(queryObj) {
-        console.log("queryObj", queryObj);
         const {limit} = queryObj;
         try {
             if (existsSync(path)) {
@@ -35,7 +34,7 @@ class ProductManager {
 
     async getProductById(id) {
         try{
-            const products = await this.loadProductsFromFile();
+            const products = await this.loadProductsFromFile(id);
             const product = products.find(product => product.id === id);
             if (!product) {
                 console.error('Producto no encontrado');
@@ -45,8 +44,6 @@ class ProductManager {
         } catch (error) {
             return error;
         }
-
-        
     }
 
     async getProducts() {
@@ -58,12 +55,10 @@ class ProductManager {
             console.error('Todos los campos son requeridos');
             return;
         }
-
         if (this.products.some(product => product.code === code)) {
             console.error('El producto con el mismo código ya existe');
             return;
         }
-
         const newProduct = {
             id: this.products.length === 0 ? 1 : this.products[this.products.length - 1].id + 1,
             title,
@@ -73,7 +68,6 @@ class ProductManager {
             code,
             stock,
         };
-
         this.products.push(newProduct);
         this.saveProductsToFile();
         console.log('Producto añadido satisfactoriamente:', newProduct, "\n");
@@ -85,7 +79,6 @@ class ProductManager {
             console.error('Producto no encontrado');
             return;
         }
-
         this.products[productIndex] = { ...updatedProduct, id };
         this.saveProductsToFile();
         console.log('Producto actualizado satisfactoriamente:', this.products[productIndex]);
@@ -97,7 +90,6 @@ class ProductManager {
             console.error('Producto no encontrado');
             return;
         }
-
         this.products.splice(productIndex, 1);
         this.saveProductsToFile();
         console.log('Producto eliminado satisfactoriamente');
