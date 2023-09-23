@@ -10,6 +10,7 @@ app.get("/api/products", async (req, res) => {
 });
 
 app.get("/api/products/:id",async (req,res)=>{
+    //console.log (req.params);
     const {id} = req.params
     const product = await manager.getProductById(+id)
     res.json({message: "Product found: ", product})
